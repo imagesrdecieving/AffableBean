@@ -3,47 +3,91 @@
     Created on : Feb 3, 2018, 9:36:03 PM
     Author     : Anthony Catalano amcatalano@mail.fhsu.edu
 --%>
+<div id="singleColumn">
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+    <p id="confirmationText">
+        <strong>Your order has been successfully processed and will be delivered within 24 hours.</strong>
+        <br><br>
+        Please keep a note of your confirmation number:
+        <strong>${orderRecord.confirmationNumber}</strong>
+        <br>
+        If you have a query concerning your order, feel free to <a href="#">contact us</a>.
+        <br><br>
+        Thank you for shopping at the Affable Bean Green Grocer!
+    </p>
 
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="css/affablebean.css">
-        <title>The Affable Bean</title>
-    </head>
-    <body>
-        <div id="main">
+    <div class="summaryColumn" >
 
-            <div id="singleColumn">
+        <table id="orderSummaryTable" class="detailsTable">
+            <tr class="header">
+                <th colspan="3">order summary</th>
+            </tr>
 
-                <p id="confirmationText">
-                    [ text ]
-                    <br><br>
-                    [ order reference number ]
-                </p>
+            <tr class="tableHeading">
+                <td>product</td>
+                <td>quantity</td>
+                <td>price</td>
+            </tr>
 
-                <div class="summaryColumn" >
+            <c:forEach var="orderedProduct" items="${orderedProducts}" varStatus="iter">
 
-                    <table id="orderSummaryTable" class="detailsTable" >
-                        <tr class="header">
-                            <th style="padding:10px">[ order summary table ]</th>
-                        </tr>
-                    </table>
+                <tr class="${((iter.index % 2) != 0) ? 'lightBlue' : 'white'}">
+                    <td>${products[iter.index].name}</td>
+                    <td class="quantityColumn">
+                        ${orderedProduct.quantity}
+                    </td>
+                    <td class="confirmationPriceColumn">
+                        &euro; ${products[iter.index].price * orderedProduct.quantity}
+                    </td>
+                </tr>
 
-                </div>
+            </c:forEach>
 
-                <div class="summaryColumn" >
+            <tr class="lightBlue"><td colspan="3" style="padding: 0 20px"><hr></td></tr>
 
-                    <table id="deliveryAddressTable" class="detailsTable">
-                        <tr class="header">
-                            <th style="padding:10px">[ customer details ]</th>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+            <tr class="lightBlue">
+                <td colspan="2" id="deliverySurchargeCellLeft"><strong>delivery surcharge:</strong></td>
+                <td id="deliverySurchargeCellRight">&euro; ${initParam.deliverySurcharge}</td>
+            </tr>
 
-        </div>
-    </body>
-</html>
+            <tr class="lightBlue">
+                <td colspan="2" id="totalCellLeft"><strong>total:</strong></td>
+                <td id="totalCellRight">&euro; ${orderRecord.amount}</td>
+            </tr>
+
+            <tr class="lightBlue"><td colspan="3" style="padding: 0 20px"><hr></td></tr>
+
+            <tr class="lightBlue">
+                <td colspan="3" id="dateProcessedRow"><strong>date processed:</strong>
+                    ${orderRecord.dateCreated}
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+    <div class="summaryColumn" >
+
+        <table id="deliveryAddressTable" class="detailsTable">
+            <tr class="header">
+                <th colspan="3">delivery address</th>
+            </tr>
+
+            <tr>
+                <td colspan="3" class="lightBlue">
+                    ${customer.name}
+                    <br>
+                    ${customer.address}
+                    <br>
+                    Prague ${customer.cityRegion}
+                    <br>
+                    <hr>
+                    <strong>email:</strong> ${customer.email}
+                    <br>
+                    <strong>phone:</strong> ${customer.phone}
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>
