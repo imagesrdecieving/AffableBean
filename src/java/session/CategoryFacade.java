@@ -1,8 +1,11 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
+ *
+ * You may not modify, use, reproduce, or distribute this software
+ * except in compliance with the terms of the license at:
+ * http://developer.sun.com/berkeley_license.html
  */
+
 package session;
 
 import entity.Category;
@@ -12,15 +15,13 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Anthony Catalano amcatalano@mail.fhsu.edu
+ * @author tgiunipero
  */
 @Stateless
 public class CategoryFacade extends AbstractFacade<Category> {
-
     @PersistenceContext(unitName = "AffableBeanPU")
     private EntityManager em;
 
-    @Override
     protected EntityManager getEntityManager() {
         return em;
     }
@@ -28,5 +29,5 @@ public class CategoryFacade extends AbstractFacade<Category> {
     public CategoryFacade() {
         super(Category.class);
     }
-    
+
 }

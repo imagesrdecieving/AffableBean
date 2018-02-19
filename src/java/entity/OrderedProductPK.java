@@ -1,29 +1,28 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
+ *
+ * You may not modify, use, reproduce, or distribute this software
+ * except in compliance with the terms of the license at:
+ * http://developer.sun.com/berkeley_license.html
  */
+
 package entity;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author Anthony Catalano amcatalano@mail.fhsu.edu
+ * @author tgiunipero
  */
 @Embeddable
 public class OrderedProductPK implements Serializable {
-
     @Basic(optional = false)
-    @NotNull
     @Column(name = "customer_order_id")
     private int customerOrderId;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "product_id")
     private int productId;
 
@@ -77,7 +76,7 @@ public class OrderedProductPK implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.OrderedProductPK[ customerOrderId=" + customerOrderId + ", productId=" + productId + " ]";
+        return "entity.OrderedProductPK[customerOrderId=" + customerOrderId + ", productId=" + productId + "]";
     }
-    
+
 }

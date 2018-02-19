@@ -1,27 +1,45 @@
-<%-- 
-    Document   : cart
-    Created on : Feb 3, 2018, 9:35:44 PM
-    Author     : Anthony Catalano amcatalano@mail.fhsu.edu
+<%--
+ * Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
+ *
+ * You may not modify, use, reproduce, or distribute this software
+ * except in compliance with the terms of the license at:
+ * http://developer.sun.com/berkeley_license.html
+
+ * author: tgiunipero
 --%>
+
+
+<%-- Set session-scoped variable to track the view user is coming from.
+     This is used by the language mechanism in the Controller so that
+     users view the same page when switching between English and Czech. --%>
+<c:set var="view" value="/cart" scope="session"/>
+
+
+<%-- HTML markup starts below --%>
 
 <div id="singleColumn">
 
     <c:choose>
         <c:when test="${cart.numberOfItems > 1}">
-            <p>Your shopping cart contains ${cart.numberOfItems} items.</p>
+            <p><fmt:message key="yourCartContains"/> ${cart.numberOfItems} <fmt:message key="items"/>.</p>
         </c:when>
         <c:when test="${cart.numberOfItems == 1}">
-            <p>Your shopping cart contains ${cart.numberOfItems} item.</p>
+            <p><fmt:message key="yourCartContains"/> ${cart.numberOfItems} <fmt:message key="item"/>.</p>
         </c:when>
         <c:otherwise>
-            <p>Your shopping cart is empty.</p>
+            <p><fmt:message key="yourCartEmpty"/></p>
         </c:otherwise>
     </c:choose>
 
     <div id="actionBar">
         <%-- clear cart widget --%>
         <c:if test="${!empty cart && cart.numberOfItems != 0}">
-            <a href="viewCart?clear=true" class="bubble hMargin">clear cart</a>
+
+            <c:url var="url" value="viewCart">
+                <c:param name="clear" value="true"/>
+            </c:url>
+
+            <a href="${url}" class="bubble hMargin"><fmt:message key="clearCart"/></a>
         </c:if>
 
         <%-- continue shopping widget --%>
@@ -38,25 +56,28 @@
             </c:choose>
         </c:set>
 
-        <a href="${value}" class="bubble hMargin">continue shopping</a>
+        <c:url var="url" value="${value}"/>
+        <a href="${url}" class="bubble hMargin"><fmt:message key="continueShopping"/></a>
 
         <%-- checkout widget --%>
         <c:if test="${!empty cart && cart.numberOfItems != 0}">
-            <a href="checkout" class="bubble hMargin">proceed to checkout &#x279f;</a>
+            <a href="<c:url value='checkout'/>" class="bubble hMargin"><fmt:message key="proceedCheckout"/></a>
         </c:if>
     </div>
 
     <c:if test="${!empty cart && cart.numberOfItems != 0}">
 
-      <h4 id="subtotal">subtotal: &euro; ${cart.subtotal}</h4>
+      <h4 id="subtotal"><fmt:message key="subtotal"/>:
+          <fmt:formatNumber type="currency" currencySymbol="&euro; " value="${cart.subtotal}"/>
+      </h4>
 
       <table id="cartTable">
 
         <tr class="header">
-            <th>product</th>
-            <th>name</th>
-            <th>price</th>
-            <th>quantity</th>
+            <th><fmt:message key="product"/></th>
+            <th><fmt:message key="name"/></th>
+            <th><fmt:message key="price"/></th>
+            <th><fmt:message key="quantity"/></th>
         </tr>
 
         <c:forEach var="cartItem" items="${cart.items}" varStatus="iter">
@@ -65,20 +86,22 @@
 
           <tr class="${((iter.index % 2) == 0) ? 'lightBlue' : 'white'}">
             <td>
-              <img src="${initParam.productImagePath}${product.name}.png"
-                   alt="${product.name}">
+                <img src="${initParam.productImagePath}${product.name}.png"
+                     alt="<fmt:message key="${product.name}"/>">
             </td>
 
-            <td>${product.name}</td>
+            <td><fmt:message key="${product.name}"/></td>
 
             <td>
-                &euro; ${cartItem.total}
+                <fmt:formatNumber type="currency" currencySymbol="&euro; " value="${cartItem.total}"/>
                 <br>
-                <span class="smallText">( &euro; ${product.price} / unit )</span>
+                <span class="smallText">(
+                    <fmt:formatNumber type="currency" currencySymbol="&euro; " value="${product.price}"/>
+                    / <fmt:message key="unit"/> )</span>
             </td>
 
             <td>
-                <form action="updateCart" method="post">
+                <form action="<c:url value='updateCart'/>" method="post">
                     <input type="hidden"
                            name="productId"
                            value="${product.id}">
@@ -90,7 +113,7 @@
                            style="margin:5px">
                     <input type="submit"
                            name="submit"
-                           value="update">
+                           value="<fmt:message key='update'/>">
                 </form>
             </td>
           </tr>
